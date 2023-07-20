@@ -1,0 +1,24 @@
+<header ngbNavbar class="navbar navbar-expand-md navbar-light bg-light px-5">
+  <a class="navbar-brand d-flex gap-4 align-items-center" href="#">
+    <img [src]="logo" alt="Logo image" height="50px" width="50px" class="rounded-circle">
+    <span class="">Reddit</span>
+  </a>
+
+  <button class="navbar-toggler" type="button" ngbCollapseToggle [attr.aria-expanded]="!isCollapsed" [attr.aria-controls]="'navbarNav'" [class.collapsed]="isCollapsed" (click)="toggleCollapse()">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div [ngbCollapse]="isCollapsed" class="collapse navbar-collapse justify-content-end" id="navbarNav">
+    <ul class="navbar-nav gap-3">
+      <li class="nav-item">
+        <a class="nav-link btn btn-primary" routerLink="/login" routerLinkActive="active">Login</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link btn btn-primary" routerLink="/register" routerLinkActive="active">Register</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link btn btn-primary">Logout</a>
+      </li>
+    </ul>
+  </div>
+</header>

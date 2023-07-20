@@ -1,0 +1,38 @@
+<div class="registration-container">
+    <form class="registration-form" [formGroup]="loginForm">
+      <h2 class="form-title">Continue Social(Anonymous) Journey</h2>
+  
+      <!-- Input box for username -->
+      <div class="form-group">
+        <app-input
+          [title]="'Username or Email'"
+          [name]="'username'"
+          [controlName]="'username'"
+          [placeholder]="'Enter username or email here'"
+          [parentForm]="loginForm"
+          [type]="'text'"
+          ngDefaultControl
+          >
+        </app-input>
+      </div>
+      <!-- Input box for username -->
+
+  
+      <!-- Input box for password -->
+      <div class="form-group">
+        <app-input
+          [title]="'Password'"
+          [name]="'password'"
+          [controlName]="'password'"
+          [placeholder]="'Enter your password here'"
+          [parentForm]="loginForm"
+          [type]="'password'"
+          ngDefaultControl
+        >
+        </app-input>  
+      </div>
+      <!-- Input box for password -->
+  
+      <input type="button" class="btn-orange" value="Continue" (click)="onSubmit()">
+    </form>
+  </div>

@@ -1,0 +1,67 @@
+<div class="registration-container">
+  <form class="registration-form" [formGroup]="registrationForm">
+    <h2 class="form-title">Start New Social(Anonymous) Journey Here</h2>
+
+    <!-- Input box for username -->
+    <div class="form-group">
+      <app-input
+        [title]="'Username'"
+        [name]="'username'"
+        [controlName]="'username'"
+        [placeholder]="'Enter your unique user name here'"
+        [parentForm]="registrationForm"
+        [type]="'text'"
+        ngDefaultControl
+        >
+      </app-input>
+    </div>
+    <!-- Input box for username -->
+
+    <!-- Input box for email -->
+    <div class="form-group">
+      <app-input
+        [title]="'Email Address'"
+        [name]="'email'"
+        [controlName]="'email'"
+        [placeholder]="'Enter your email address here'"
+        [parentForm]="registrationForm"
+        [type]="'email'"
+        ngDefaultControl
+      >
+      </app-input>
+    </div>
+    <!-- Input box for email -->
+
+    <!-- Input box for password -->
+    <div class="form-group">
+      <app-input
+        [title]="'Password'"
+        [name]="'password'"
+        [controlName]="'password'"
+        [placeholder]="'Enter your password here'"
+        [parentForm]="registrationForm"
+        [type]="'password'"
+        ngDefaultControl
+      >
+      </app-input>  
+    </div>
+    <!-- Input box for password -->
+
+    <!-- Input box for confirm password -->
+    <div class="form-group">
+      <app-input
+        [title]="'Confirm Password'"
+        [name]="'confirmPassword'"
+        [controlName]="'confirmPassword'"
+        [placeholder]="'Confirm password here'"
+        [parentForm]="registrationForm"
+        [type]="'password'"
+        ngDefaultControl
+      >
+      </app-input>
+    </div>
+    <!-- Input box for confirm password -->
+
+    <input type="button" class="btn-orange" value="Join" (click)="onSubmit()">
+  </form>
+</div>

@@ -1,0 +1,21 @@
+.registration-container {
+  position: relative;
+  margin: 0 auto;
+  transform: translateY(40%);
+  width: 500px;
+}
+  
+  
+  .registration-form {
+    max-width: 90vw;
+    width: 30rem;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+  }
+  
+  .btn-primary {
+    width: 100%;
+  }
+  

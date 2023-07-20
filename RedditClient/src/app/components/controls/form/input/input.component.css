@@ -1,0 +1,24 @@
+:host {
+  display: block;
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #0088cc;
+  box-shadow: 0 0 5px rgba(0, 136, 204, 0.5);
+}

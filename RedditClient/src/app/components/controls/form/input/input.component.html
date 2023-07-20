@@ -1,0 +1,52 @@
+<div class="form-group" [formGroup]="parentForm">
+    <label [for]="name" class="form-label">{{ title }}</label>
+
+    <div class="input-group">
+        
+        <input [id]="name" 
+            [name]="name" 
+            [formControl]="control" 
+            [placeholder]="placeholder" 
+            [readonly]="readonly"
+            [disabled]="disabled" 
+            [pattern]="pattern" 
+            [autocomplete]="autocomplete" 
+            [readonly]="readonly"
+            [type]="eyeVisible ? 'text' : type" 
+            class="form-control">
+
+        <div class="input-group-append" *ngIf="type === 'password'">
+            <span class="input-group-text" (click)="toggleEyeVisibility()">
+                <i class="bi bi-eye-fill" *ngIf="!eyeVisible"></i>
+                <i class="bi bi-eye-slash-fill" *ngIf="eyeVisible"></i>
+            </span>
+        </div>
+
+    </div>
+
+    <ng-container *ngIf="control.touched && control.invalid">
+        <span class="text-danger">
+            <ng-container *ngIf="control.hasError('required')"> 
+                {{ title }} is required.
+            </ng-container>
+            <ng-container *ngIf="control.hasError('minlength')">
+                {{ title }} should have at least {{ control.errors?.minlength.requiredLength }} characters.
+            </ng-container>
+            <ng-container *ngIf="control.hasError('maxlength')">
+                {{ title }} can have maximum {{ control.errors?.maxlength.requiredLength }} characters.
+            </ng-container>
+            <ng-container *ngIf="control.hasError('maxlength')">
+                {{ title }} can have maximum {{ control.errors?.maxlength.requiredLength }} characters.
+            </ng-container>
+            <ng-container *ngIf="!control.hasError('required') && control.hasError('invalidPassword') && !control.hasError('maxlength') && !control.hasError('minlength')">
+                {{ title }} should have at least 8 character, 1 uppercase, 1 lowercase and 1 symbol.
+            </ng-container>
+            <ng-container *ngIf="!control.hasError('required') && control.hasError('invalidUsername') && !control.hasError('maxlength') && !control.hasError('minlength')">
+                {{ title }} should have at least 3 character and can only contain alphabets, numbers and '-' and '_'.
+            </ng-container>
+            <ng-container *ngIf="!control.hasError('required') && control.hasError('confirmPasswordError')">
+                {{ title }} should be same as password.
+            </ng-container>
+        </span>
+    </ng-container>
+</div>
