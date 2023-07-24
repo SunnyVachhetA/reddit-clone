@@ -1,17 +1,19 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { Patterns } from '@app/constants/patterns';
 import { ValidationRules } from '@app/constants/validation-rules';
 import { ConfirmPasswordValidator } from '@app/shared/Validators/confirm-password-validator';
 import { passwordValidator } from '@app/shared/Validators/password.validator';
 import { usernameValidator } from '@app/shared/Validators/username.validator';
 import { IRegisterRequest } from '@app/models/account/register-request.interface';
-import { RegisterService } from '@app/services/account/login.service';
+import { RegisterService } from '@app/services/account/register.service';
+import { emailValidator } from '@app/shared/Validators/email.validator';
+import { IResponse } from '@app/models/shared/response.interface';
 
 @Component({
     selector: 'app-register',
     templateUrl: './register.component.html',
-    styleUrls: ['./register.component.css']
+    styleUrls: ['./register.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterComponent implements OnInit{
 
@@ -40,7 +42,7 @@ export class RegisterComponent implements OnInit{
                 Validators.required, 
                 Validators.minLength( ValidationRules.minEmailLength ), 
                 Validators.maxLength( ValidationRules.maxEmailLength ),
-                Validators.pattern( Patterns.email )
+                emailValidator()
             ]
         );
 
@@ -92,7 +94,13 @@ export class RegisterComponent implements OnInit{
 
         const request: IRegisterRequest = this.GetRegisterData(); 
 
-        this.registerService.register(request);
+        this.registerService.register(request)
+            .subscribe((res: IResponse<any>) => {
+                console.log(res);
+            },
+            (error: any) => {
+                console.log(error);
+            });
     }
 
     GetRegisterData(): IRegisterRequest

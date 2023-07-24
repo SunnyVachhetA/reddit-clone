@@ -1,5 +1,5 @@
 //Base Endpoint
-export const ACCOUNT_URL = "/account";
+export const ACCOUNT_URL = "api/accounts";
 
 //Account Endpoints
 export const LOGIN_URL = `${ACCOUNT_URL}/login`;

@@ -9,7 +9,8 @@ import { CommonModule } from '@angular/common';
 import { HomeModule } from './components/home/home.module';
 import { SharedModule } from './components/shared/shared.module';
 import { HomeRoutingModule } from './components/home/home-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule} from '@angular/common/http';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -18,13 +19,14 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     BrowserModule,
     CommonModule,
-    SharedModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
     HomeModule,
+    ToastrModule,
     HomeRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ToastrModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent],

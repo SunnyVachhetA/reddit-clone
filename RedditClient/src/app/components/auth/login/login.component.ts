@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Patterns } from '@app/constants/patterns';
 import { ValidationRules } from '@app/constants/validation-rules';
+import { CustomToastrService } from '@app/services/shared/custom-toastr.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -18,7 +19,8 @@ export class LoginComponent implements OnInit
   showPassword : boolean = false;
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private toastr: CustomToastrService
   ){}
 
   ngOnInit(): void {

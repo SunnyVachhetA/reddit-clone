@@ -47,6 +47,9 @@
             <ng-container *ngIf="!control.hasError('required') && control.hasError('confirmPasswordError')">
                 {{ title }} should be same as password.
             </ng-container>
+            <ng-container *ngIf="!control.hasError('required') && control.hasError('invalidEmail') && !control.hasError('maxlength') && !control.hasError('minlength')">
+                {{ title }} should contain @ and domain name.
+            </ng-container>
         </span>
     </ng-container>
 </div>
