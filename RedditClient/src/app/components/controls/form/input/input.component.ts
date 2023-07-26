@@ -29,9 +29,6 @@ export class InputComponent implements OnInit {
     readonly: boolean = false;
 
     @Input()
-    disabled: boolean = false;
-
-    @Input()
     pattern!: string;
 
     @Input()

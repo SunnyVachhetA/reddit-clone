@@ -1,8 +1,8 @@
 export interface IResponse<T>
 {
-    data: T,
+    data?: T | null,
     statusCode: number,
     success: boolean,
     message: string,
-    error: any
+    errors: any
 }

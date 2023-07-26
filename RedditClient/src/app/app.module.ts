@@ -11,6 +11,8 @@ import { SharedModule } from './components/shared/shared.module';
 import { HomeRoutingModule } from './components/home/home-routing.module';
 import { HttpClientModule} from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
+import { CUSTOM_ERROR_INTERCEPTOR } from './interceptors/error.interceptor';
+import { JWT_INTERCEPTOR } from './interceptors/jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,10 @@ import { ToastrModule } from 'ngx-toastr';
     HttpClientModule,
     ToastrModule.forRoot()
   ],
-  providers: [],
+  providers: [
+    CUSTOM_ERROR_INTERCEPTOR,
+    JWT_INTERCEPTOR
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
