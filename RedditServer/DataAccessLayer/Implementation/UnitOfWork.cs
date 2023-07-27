@@ -23,9 +23,7 @@ public class UnitOfWork : IUnitOfWork
     #region Interface methods
 
     public async Task SaveAsync(CancellationToken cancellationToken = default)
-    {
-        int result = await _dbContext.SaveChangesAsync(cancellationToken);
-    }
+        => await _dbContext.SaveChangesAsync(cancellationToken);
 
     #endregion Interface methods
 }

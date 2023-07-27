@@ -8,4 +8,6 @@ public interface IRepository<T> where T : class
     Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> filter, CancellationToken cancellationToken = default);
 
     Task<bool> AnyAsync(Expression<Func<T, bool>> filter, CancellationToken cancellationToken = default);
+
+    Task UpdateAsync(T model, CancellationToken cancellationToken = default);
 }

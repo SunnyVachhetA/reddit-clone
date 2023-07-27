@@ -17,7 +17,9 @@ public class RegisterRequestValidator : AbstractValidator<RegisterRequestDto>
             .MinimumLength(MinUsernameLength)
             .MaximumLength(MaxUsernameLength)
             .Matches(UsernameRegEx)
-                .WithMessage(MessageConstants.UsernameRegExFailed);
+                .WithMessage(MessageConstants.UsernameRegExFailed)
+            .Must(IsDuplicateUsername)
+                .WithMessage(MessageConstants.UsernameAlreadyExists);
 
         RuleFor(model => model.Email)
           .NotNull().NotEmpty()
@@ -38,4 +40,7 @@ public class RegisterRequestValidator : AbstractValidator<RegisterRequestDto>
 
     private bool IsDuplicateEmail(string email)
         => !(_accountService.IsDuplicateEmail(email).Result);
+
+    private bool IsDuplicateUsername(string username)
+        => !(_accountService.IsDuplicateUsername(username).Result);
 }

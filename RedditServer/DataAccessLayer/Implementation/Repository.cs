@@ -39,5 +39,9 @@ public class Repository<T> : IRepository<T> where T : class
         CancellationToken cancellationToken = default)
         => await _dbSet.AnyAsync(filter, cancellationToken);
 
+    public async Task UpdateAsync(T model,
+        CancellationToken cancellationToken = default)
+    => await Task.Run(() => _dbSet.Update(model), cancellationToken);
+
     #endregion Interface methods
 }

@@ -2,7 +2,7 @@
 using Entities.DTOs.Response;
 using Microsoft.AspNetCore.Mvc;
 
-namespace RedditAPI;
+namespace RedditAPI.Helpers;
 
 public static class ResponseHelper
 {

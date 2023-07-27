@@ -6,8 +6,11 @@ using Common.Utils;
 using DataAccessLayer.Abstraction;
 using Entities.DataModels;
 using Entities.DTOs.Request;
+using Entities.DTOs.Response;
 using Entities.Mapper;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Expressions;
+using System.Security.Claims;
 
 namespace BusinessAccessLayer.Implementation;
 
@@ -17,16 +20,19 @@ public class AccountService : IAccountService
 
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ITokenService _tokenService;
 
     #endregion Properties
 
     #region Constructor
 
     public AccountService(IUserRepository userRepository,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        ITokenService tokenService)
     {
         _unitOfWork = unitOfWork;
         _userRepository = userRepository;
+        _tokenService = tokenService;
     }
 
     #endregion Constructor
@@ -44,15 +50,26 @@ public class AccountService : IAccountService
         await _unitOfWork.SaveAsync(cancellationToken);
     }
 
-    public async Task Login(LoginRequestDto dto)
+    public async Task<UserAuthTokenDto> Login(LoginRequestDto dto, CancellationToken cancellationToken = default)
     {
-        User? model = await _userRepository.FirstOrDefaultAsync(CredentialFilter(dto));
+        User? model = await _userRepository.FirstOrDefaultAsync(CredentialFilter(dto), cancellationToken);
+
         if (model is null || !PasswordHasherUtil.VerifyPassword(dto.Password, model.Password))
             throw new UnauthorizedException(MessageConstants.InvalidLoginCredential);
+
+        UserAuthTokenDto authDto = GenerateTokenModel(model);
+
+        await _userRepository.UpdateAsync(model, cancellationToken);
+        await _unitOfWork.SaveAsync(cancellationToken);
+
+        return authDto;
     }
 
     public async Task<bool> IsDuplicateEmail(string email)
         => await _userRepository.AnyAsync(UserEmailFilter(email));
+
+    public async Task<bool> IsDuplicateUsername(string username)
+        => await _userRepository.AnyAsync(UsernameFilter(username));
 
     #endregion Interface Methods
 
@@ -64,6 +81,27 @@ public class AccountService : IAccountService
     private static string HashPassword(string password)
         => PasswordHasherUtil.HashPassword(password);
 
+    private static IEnumerable<Claim> GenerateUserClaims(User model)
+        => new List<Claim>()
+        {
+            new(JwtRegisteredClaimNames.Sub, model.Username),
+            new(JwtRegisteredClaimNames.NameId, model.Id.ToString()),
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
+
+    private UserAuthTokenDto GenerateTokenModel(User model)
+    {
+        IEnumerable<Claim> claims = GenerateUserClaims(model);
+
+        (string token, int jwtExpiryTimeInMinute) accessToken = _tokenService.GenerateAccessToken(claims);
+        RefreshTokenDto refreshToken = _tokenService.GenerateRefreshToken();
+
+        model.RefreshToken = refreshToken.Token;
+        model.RefreshTokenExpirationTime = refreshToken.ExpirationDate;
+
+        return new UserAuthTokenDto(model.Email, model.Username, accessToken.token, refreshToken, accessToken.jwtExpiryTimeInMinute);
+    }
+
     #endregion Helper methods
 
     #region Filters
@@ -71,8 +109,12 @@ public class AccountService : IAccountService
     private static Expression<Func<User, bool>> UserEmailFilter(string email)
         => user => user.Email.Equals(email);
 
+    private static Expression<Func<User, bool>> UsernameFilter(string username)
+        => user => user.Username.Equals(username);
+
     private static Expression<Func<User, bool>> CredentialFilter(LoginRequestDto dto)
         => user => (user.Email.Equals(dto.Username) || user.Username.Equals(dto.Username))
                     && user.Status == UserStatusType.Active;
-    #endregion
+
+    #endregion Filters
 }

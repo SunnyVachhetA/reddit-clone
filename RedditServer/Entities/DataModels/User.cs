@@ -18,4 +18,10 @@ public class User : AuditableEntity<Guid>
 
     [Column("status")]
     public UserStatusType Status { get; set; }
+
+    [Column("refresh_token", TypeName = "VARCHAR(100)")]
+    public string? RefreshToken { get; set; }
+
+    [Column("refresh_token_expiration_time")]
+    public DateTimeOffset? RefreshTokenExpirationTime { get; set; }
 }

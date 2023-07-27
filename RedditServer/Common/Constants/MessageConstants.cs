@@ -13,6 +13,8 @@ public class MessageConstants
 
     public static readonly string AccountCreated = "Account created successfully.";
 
+    public static readonly string LoginSuccess = "Successfully logged in.";
+
     #endregion Success Message
 
     #region Exception Messages
@@ -37,5 +39,8 @@ public class MessageConstants
     public static readonly string EmailAlreadyExists = "User already exists. Please try with other email.";
 
     public static readonly string InvalidLoginCredential = "Invalid email/username or password.";
+
+    public static readonly string UsernameAlreadyExists = "Username is not available.";
+
     #endregion Validation Messages
 }

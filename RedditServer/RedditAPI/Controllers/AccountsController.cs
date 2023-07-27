@@ -1,7 +1,11 @@
 ﻿using BusinessAccessLayer.Abstraction;
 using Common.Constants;
+using Common.Utils;
 using Entities.DTOs.Request;
+using Entities.DTOs.Response;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RedditAPI.Helpers;
 using WebAPI.Filters;
 
 namespace RedditAPI.Controllers;
@@ -37,14 +41,28 @@ public class AccountsController : ControllerBase
         return ResponseHelper.CreateResourceResponse(null, MessageConstants.AccountCreated);
     }
 
-
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto dto,
         CancellationToken cancellationToken)
     {
-        await _accountService.Login(dto);
+        UserAuthTokenDto authDto = await _accountService.Login(dto, cancellationToken);
 
-        return ResponseHelper.SuccessResponse(null);
+        CookieOptions options = new()
+        {
+            HttpOnly = true,
+            Expires = DateUtil.AddDays(SystemConstants.RefreshTokenExpiryInDays)
+        };
+
+        CookieHelper.SetCookie(Response, SystemConstants.RefreshTokenKey, authDto.RefreshToken.Token, options);
+
+        return ResponseHelper.SuccessResponse(authDto, MessageConstants.LoginSuccess);
+    }
+
+    [HttpGet]
+    [Authorize]
+    public IActionResult Get()
+    {
+        return ResponseHelper.SuccessResponse(null, "This is auth resource accessed by client.");
     }
 
     #endregion Endpoint Methods
