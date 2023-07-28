@@ -1,5 +1,6 @@
 export interface ILoginResponse {
     email: string,
     username: string,
-    accessToken: string
+    accessToken: string,
+    accessTokenExpirationInMinute: number
 }

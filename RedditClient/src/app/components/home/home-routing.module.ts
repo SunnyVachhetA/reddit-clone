@@ -4,17 +4,20 @@ import { LoginComponent } from '../auth/login/login.component';
 import { RegisterComponent } from '../auth/register/register.component';
 import { UserFeedComponent } from './home-feed/user-feed/user-feed.component';
 import { AuthGuard } from "@app/guards/auth.guard";
+import { LoggedUserGuard } from "@app/guards/logged-user.guard";
 
 const routes : Routes = [
     {
         path: 'login',
         component: LoginComponent,
+        canActivate: [LoggedUserGuard],
         loadChildren: () => import('../auth/auth.module')
                               .then(module => module.AuthModule)
     },
     {
         path: 'register',
         component: RegisterComponent,
+        canActivate: [LoggedUserGuard],
         loadChildren: () => import('../auth/auth.module')
                               .then(module => module.AuthModule)
     },

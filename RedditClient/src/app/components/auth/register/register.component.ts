@@ -95,8 +95,9 @@ export class RegisterComponent implements OnInit {
         if (this.registrationForm.invalid)
             return;
 
-        const request: IRegisterRequest = this.GetRegisterData();
+        const request: IRegisterRequest = this.registrationForm.value;
 
+        debugger;
         this.registerService.register(request)
             .subscribe({
                 next: (response: IResponse<IRegisterRequest>) => {
@@ -104,15 +105,5 @@ export class RegisterComponent implements OnInit {
                     this.toastrService.success(response.message);
                 }
             });
-    }
-
-    GetRegisterData(): IRegisterRequest {
-        const request: IRegisterRequest =
-        {
-            username: this.username.value,
-            password: this.password.value,
-            email: this.email.value
-        };
-        return request;
     }
 }

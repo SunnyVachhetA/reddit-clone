@@ -35,14 +35,14 @@ export class LoginComponent implements OnInit {
   }
 
   createForm(): void {
-    this.username = new FormControl('',
+    this.username = new FormControl('sun_pirate2',
       [
         Validators.required,
         Validators.min(ValidationRules.minUserNameLength),
         Validators.max(ValidationRules.maxEmailLength)
       ]);
 
-    this.password = new FormControl('',
+    this.password = new FormControl('Test@123',
       [
         Validators.required,
         Validators.pattern(Patterns.password)

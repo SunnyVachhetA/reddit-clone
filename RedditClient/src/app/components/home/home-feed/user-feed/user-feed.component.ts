@@ -1,7 +1,8 @@
 import { Component, OnInit } from "@angular/core";
+import { ILoginResponse } from "@app/models/account/response/login-response.interface";
 import { IResponse } from "@app/models/shared/response.interface";
 import { AuthService } from "@app/services/account/auth.service";
-import { Observable, map, of } from "rxjs";
+import { CustomToastrService } from "@app/services/shared/custom-toastr.service";
 
 @Component({
     selector: 'user-feed',
@@ -11,12 +12,24 @@ import { Observable, map, of } from "rxjs";
 export class UserFeedComponent implements OnInit {
 
     constructor(
+        private authService: AuthService,
+        private toastrService: CustomToastrService
     ) { }
 
 
     ngOnInit(): void {
     }
 
+    refreshToken(): void
+    {
+        debugger;
+        this.authService.refreshToken()
+            .subscribe({
+                next: (res: IResponse<ILoginResponse>) => {
+                    this.toastrService.success("Refreshed Token :>");
+                }
+            });
+    }
 }
 
 
