@@ -1,9 +1,8 @@
 ﻿using BusinessAccessLayer.Abstraction;
 using Common.Constants;
-using Common.Utils;
+using Common.Exceptions;
 using Entities.DTOs.Request;
 using Entities.DTOs.Response;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RedditAPI.Helpers;
 using WebAPI.Filters;
@@ -47,23 +46,26 @@ public class AccountsController : ControllerBase
     {
         UserAuthTokenDto authDto = await _accountService.Login(dto, cancellationToken);
 
-        CookieOptions options = new()
-        {
-            HttpOnly = true,
-            Expires = DateUtil.AddDays(SystemConstants.RefreshTokenExpiryInDays)
-        };
-
-        CookieHelper.SetCookie(Response, SystemConstants.RefreshTokenKey, authDto.RefreshToken.Token, options);
+        if (authDto.RefreshToken is not null)
+            CookieHelper.SetRefreshTokenInCookie(Response, authDto.RefreshToken);
 
         return ResponseHelper.SuccessResponse(authDto, MessageConstants.LoginSuccess);
     }
 
-    [HttpGet]
-    [Authorize]
-    public IActionResult Get()
+    [HttpPost("refresh-token")]
+    public async Task<IActionResult> RefreshToken(CancellationToken cancellationToken)
     {
-        return ResponseHelper.SuccessResponse(null, "This is auth resource accessed by client.");
-    }
+        string? refreshToken = Request.Cookies[SystemConstants.RefreshTokenKey];
 
+        if (refreshToken is null)
+            throw new ModelValidationException(MessageConstants.InvalidRefreshToken);
+
+        UserAuthTokenDto authDto = await _accountService.RefreshToken(refreshToken, cancellationToken);
+
+        if (authDto.RefreshToken is not null)
+            CookieHelper.SetRefreshTokenInCookie(Response, authDto.RefreshToken);
+
+        return ResponseHelper.SuccessResponse(authDto, MessageConstants.AccessTokenRefreshSuccess);
+    }
     #endregion Endpoint Methods
 }

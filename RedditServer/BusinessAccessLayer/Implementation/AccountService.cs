@@ -57,10 +57,18 @@ public class AccountService : IAccountService
         if (model is null || !PasswordHasherUtil.VerifyPassword(dto.Password, model.Password))
             throw new UnauthorizedException(MessageConstants.InvalidLoginCredential);
 
-        UserAuthTokenDto authDto = GenerateTokenModel(model);
+        UserAuthTokenDto authDto = await GetAuthTokenDto(model, cancellationToken);
 
-        await _userRepository.UpdateAsync(model, cancellationToken);
-        await _unitOfWork.SaveAsync(cancellationToken);
+        return authDto;
+    }
+
+    public async Task<UserAuthTokenDto> RefreshToken(string refreshToken,
+        CancellationToken cancellationToken = default)
+    {
+        User model = await _userRepository.FirstOrDefaultAsync(IsRefreshTokenValid(refreshToken), cancellationToken)
+                    ?? throw new UnauthorizedException(MessageConstants.InvalidRefreshToken);
+
+        UserAuthTokenDto authDto = await GetAuthTokenDto(model, cancellationToken);
 
         return authDto;
     }
@@ -93,13 +101,37 @@ public class AccountService : IAccountService
     {
         IEnumerable<Claim> claims = GenerateUserClaims(model);
 
-        (string token, int jwtExpiryTimeInMinute) accessToken = _tokenService.GenerateAccessToken(claims);
-        RefreshTokenDto refreshToken = _tokenService.GenerateRefreshToken();
+        (string token, int jwtExpiryTimeInMinute) = _tokenService.GenerateAccessToken(claims);
 
+        RefreshTokenDto? refreshToken = GenerateRefreshToken(model);
+
+        return new UserAuthTokenDto(model.Email, model.Username, token, refreshToken, jwtExpiryTimeInMinute);
+    }
+
+    private RefreshTokenDto? GenerateRefreshToken(User model)
+    {
+        if ((model.RefreshToken is not null && model.RefreshTokenExpirationTime is not null)
+            && (model.RefreshTokenExpirationTime > DateUtil.UtcNow))
+        {
+            return new RefreshTokenDto(model.RefreshToken,
+                DateUtil.Difference(model.RefreshTokenExpirationTime.Value), model.RefreshTokenExpirationTime.Value);
+        }
+
+        RefreshTokenDto? refreshToken = _tokenService.GenerateRefreshToken();
         model.RefreshToken = refreshToken.Token;
         model.RefreshTokenExpirationTime = refreshToken.ExpirationDate;
 
-        return new UserAuthTokenDto(model.Email, model.Username, accessToken.token, refreshToken, accessToken.jwtExpiryTimeInMinute);
+        return refreshToken;
+    }
+
+    private async Task<UserAuthTokenDto> GetAuthTokenDto(User model,
+        CancellationToken cancellationToken = default)
+    {
+        UserAuthTokenDto authDto = GenerateTokenModel(model);
+
+        await _userRepository.UpdateAsync(model, cancellationToken);
+        await _unitOfWork.SaveAsync(cancellationToken);
+        return authDto;
     }
 
     #endregion Helper methods
@@ -115,6 +147,9 @@ public class AccountService : IAccountService
     private static Expression<Func<User, bool>> CredentialFilter(LoginRequestDto dto)
         => user => (user.Email.Equals(dto.Username) || user.Username.Equals(dto.Username))
                     && user.Status == UserStatusType.Active;
+
+    private static Expression<Func<User, bool>> IsRefreshTokenValid(string token)
+        => user => user.RefreshToken == token && DateUtil.UtcNow < user.RefreshTokenExpirationTime;
 
     #endregion Filters
 }

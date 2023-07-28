@@ -15,6 +15,8 @@ public class MessageConstants
 
     public static readonly string LoginSuccess = "Successfully logged in.";
 
+    public static readonly string AccessTokenRefreshSuccess = "Access token refreshed successfully.";
+
     #endregion Success Message
 
     #region Exception Messages
@@ -41,6 +43,8 @@ public class MessageConstants
     public static readonly string InvalidLoginCredential = "Invalid email/username or password.";
 
     public static readonly string UsernameAlreadyExists = "Username is not available.";
+
+    public static readonly string InvalidRefreshToken = "Refresh token is either expired or not passed.";
 
     #endregion Validation Messages
 }

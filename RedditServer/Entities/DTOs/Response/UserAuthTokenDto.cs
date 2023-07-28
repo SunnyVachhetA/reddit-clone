@@ -11,12 +11,12 @@ public class UserAuthTokenDto
     public int AccessTokenExpirationInMinute { get; }
 
     [JsonIgnore]
-    public RefreshTokenDto RefreshToken { get; }
+    public RefreshTokenDto? RefreshToken { get; }
 
     public UserAuthTokenDto(string email,
         string username,
         string accessToken,
-        RefreshTokenDto refreshToken,
+        RefreshTokenDto? refreshToken,
         int accessTokenExpirationInMinute)
     {
         Email = email;

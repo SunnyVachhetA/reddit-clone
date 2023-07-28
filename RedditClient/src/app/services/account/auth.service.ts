@@ -65,9 +65,6 @@ export class AuthService {
         return this.http.post<IResponse<ILoginResponse>>(`${environment.apiUrl}/${ACCOUNT_URL}/refresh-token`, {},
         {
             withCredentials: true,
-            headers: {
-                credentials: 'include'
-            }
         });
 
     }

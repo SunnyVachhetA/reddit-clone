@@ -15,11 +15,22 @@ public class AppDbContext : DbContext
         : base(options)
     { }
 
-    public virtual DbSet<User> Users { get; set; }
-
     #endregion Constructor
 
+    #region Properties
+
+    public virtual DbSet<User> Users { get; set; }
+
+    public virtual DbSet<SubReddit> Subredits { get; set; }
+
+    public virtual DbSet<SubRedditModerator> SubRedditModerators { get; set; }
+
+    public virtual DbSet<SubRedditTopic> SubRedditTopics { get; set; }
+
+    #endregion Properties
+
     #region Methods
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
@@ -62,5 +73,5 @@ public class AppDbContext : DbContext
         return false;
     }
 
-    #endregion
+    #endregion Methods
 }

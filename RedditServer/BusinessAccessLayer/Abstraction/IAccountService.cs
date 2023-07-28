@@ -11,5 +11,7 @@ public interface IAccountService
 
     Task<UserAuthTokenDto> Login(LoginRequestDto dto, CancellationToken cancellationToken = default);
 
+    Task<UserAuthTokenDto> RefreshToken(string refreshToken, CancellationToken cancellationToken = default);
+
     Task Register(RegisterRequestDto dto, CancellationToken cancellationToken = default);
 }

@@ -44,9 +44,11 @@ public static class ApplicationConfiguration
         services.AddCors(options =>
         {
             options.AddPolicy(SystemConstants.CorsPolicy,
-                builder => builder.AllowAnyOrigin()
+                builder => builder
+                .WithOrigins("http://localhost:4200")
                 .AllowAnyMethod()
-                .AllowAnyHeader());
+                .AllowAnyHeader()
+                .AllowCredentials());
         });
     }
     public static void SetRequestBodySize(this IServiceCollection services)

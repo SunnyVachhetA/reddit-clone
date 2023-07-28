@@ -21,15 +21,17 @@ public static class ResponseHelper
     }
 
     public static IActionResult SuccessResponse(object? data,
-        string message = MessageConstants.GlobalSuccess)
+        string message = MessageConstants.GlobalSuccess,
+        int statusCode = StatusCodes.Status200OK)
     {
         ApiResponse response = new()
         {
-            StatusCode = StatusCodes.Status200OK,
+            StatusCode = statusCode,
             Message = message,
             Data = data,
             Success = true
         };
-        return new ObjectResult(response) { StatusCode = StatusCodes.Status200OK };
+
+        return new ObjectResult(response) { StatusCode = statusCode };
     }
 }
