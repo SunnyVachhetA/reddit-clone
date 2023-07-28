@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using RedditAPI.Helpers;
 using WebAPI.Filters;
 
-namespace RedditAPI.Controllers;
+namespace RedditAPI.Areas.Account.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

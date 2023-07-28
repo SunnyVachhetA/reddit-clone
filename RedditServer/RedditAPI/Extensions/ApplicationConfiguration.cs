@@ -31,12 +31,14 @@ public static class ApplicationConfiguration
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ISubRedditRepository, SubRedditRepository>();
     }
 
     public static void RegisterServices(this IServiceCollection services)
     {
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<ISubRedditService, SubRedditService>();
     }
 
     public static void ConfigureCors(this IServiceCollection services)
