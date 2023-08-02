@@ -19,17 +19,6 @@ export class UserFeedComponent implements OnInit {
 
     ngOnInit(): void {
     }
-
-    refreshToken(): void
-    {
-        debugger;
-        this.authService.refreshToken()
-            .subscribe({
-                next: (res: IResponse<ILoginResponse>) => {
-                    this.toastrService.success("Refreshed Token :>");
-                }
-            });
-    }
 }
 
 

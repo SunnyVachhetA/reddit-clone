@@ -1,0 +1,10 @@
+<div [formGroup]="parentForm" class="form-group">
+    <label [for]="controlName" class="form-label">{{ label }}</label>
+    <input type="file" [id]="controlName" (change)="onSelectFile($event)">
+</div>
+
+<ng-container *ngIf="control.dirty && showPreview">
+    <div>
+        <img [src]="previewFileSrc" alt="Preview Image" [class]="previewFileCss">
+    </div>
+</ng-container>

@@ -1,0 +1,58 @@
+<section>
+  <form [formGroup]="subredditForm" (ngSubmit)="onSubmit()">
+    <h2>
+      Create your subreddit | community
+    </h2>
+
+    <!-- Title Input box -->
+    <app-input [title]="'Subreddit Title'" [name]="'title'" [controlName]="'title'" [placeholder]="'Enter title here'"
+      [parentForm]="subredditForm" [type]="'text'" ngDefaultControl>
+    </app-input>
+    <!-- Title Input box -->
+
+    <!-- Slug Input box -->
+    <app-input [title]="'Subreddit Slug'" [name]="'slug'" [controlName]="'slug'" [placeholder]="'Enter slug here'"
+      [parentForm]="subredditForm" [type]="'text'" ngDefaultControl>
+    </app-input>
+    <!-- Slug Input box -->
+
+    <!-- Description Box  -->
+    <app-textbox name="description" label="Subreddit description" [parentForm]="subredditForm"
+      placeholder="Enter subreddit description" controlName="description">
+    </app-textbox>
+    <!-- Description Box  -->
+
+    <!-- Topic checkboxes  -->
+    <div class="form-group">
+      <app-checkbox [items]="topicOptions" (selected)="addTopic($event)"></app-checkbox>
+    </div>
+    <!-- Topic Checkboxes  -->
+
+    <!-- Status dropdown  -->
+    <app-dropdown label="Set Status" [dropdownItems]="statusMenu" placeholder="Select Status"
+      [parentForm]="subredditForm" controlName="status">
+    </app-dropdown>
+    <!-- Status dropdown -->
+
+    <!-- Subreddit visibility -->
+    <app-dropdown label="Set Visibility" [dropdownItems]="typeMenu" placeholder="Select Visibility"
+      [parentForm]="subredditForm" controlName="type">
+    </app-dropdown>
+    <!-- Subreddit visibility -->
+
+    <!-- Icon File Upload  -->
+    <app-file-upload controlName='icon' [parentForm]="subredditForm" label="Subreddit Icon"
+      placeholder="Upload Subreddit Icon" [showPreview]="true" previewFileCss="icon_preview" (selectFile)="uploadIconFile($event)">
+    </app-file-upload>
+    <!-- Icon File Upload  -->
+
+    <!-- Banner file upload -->
+    <app-file-upload controlName='banner' [parentForm]="subredditForm" label="Subreddit Banner"
+      placeholder="Upload Subreddit Banner" previewFileCss="icon_preview" (selectFile)="uploadBannerFile($event)">
+    </app-file-upload>
+    <!-- Banner file upload -->
+
+    <button type="submit" class="btn btn-primary">Create SubReddit</button>
+
+  </form>
+</section>

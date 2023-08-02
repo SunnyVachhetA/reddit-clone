@@ -1,0 +1,11 @@
+
+<div class="d-flex flex-wrap gap-4 justify-content-start align-items-center">
+
+    <label class="rounded-pill" *ngFor="let item of items">
+
+        <input type="checkbox" [value]="item.id" [checked]="item?.selected" (change)="topicChange(item)"/>
+        <span> {{ item?.title }} </span>
+
+    </label>
+
+</div>

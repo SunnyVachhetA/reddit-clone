@@ -1,0 +1,7 @@
+.icon_preview
+{
+    aspect-ratio: 1;
+    width: 3rem;
+    border-radius: 50%;
+    object-fit: cover;
+}

@@ -1,0 +1,9 @@
+<div class="form-group" [formGroup]="parentForm">
+    <label for="dropdownSelect" class="form-label">{{ label }}</label>
+    <select class="form-select" [formControlName]="controlName" [required]="required">
+        <option value="" selected disabled>{{ placeholder }}</option>
+        <option *ngFor="let item of dropdownItems" [value]="item.id" [selected]="item.selected">
+            {{ item.title }}
+        </option>
+    </select>
+</div>

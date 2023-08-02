@@ -64,7 +64,7 @@ export class AuthService {
         console.log(document.cookie);
         return this.http.post<IResponse<ILoginResponse>>(`${environment.apiUrl}/${ACCOUNT_URL}/refresh-token`, {},
         {
-            withCredentials: true,
+            withCredentials: true
         });
 
     }
