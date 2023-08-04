@@ -4,24 +4,26 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities.DataModels;
 
-[Table("user")]
+[Table("tbUser")]
 public class User : AuditableEntity<Guid>
 {
-    [Column("username", TypeName = "VARCHAR(20)")]
+    [Column(TypeName = "VARCHAR(20)")]
     public string Username { get; set; } = string.Empty;
 
-    [Column("email", TypeName = "VARCHAR(255)")]
+    [Column(TypeName = "VARCHAR(255)")]
     public string Email { get; set; } = string.Empty;
 
-    [Column("password", TypeName = "VARCHAR(100)")]
+    [Column(TypeName = "VARCHAR(100)")]
     public string Password { get; set; } = string.Empty;
 
-    [Column("status")]
+    public string Avatar { get; set; } = null!;
+
     public UserStatusType Status { get; set; }
 
-    [Column("refresh_token", TypeName = "VARCHAR(100)")]
+    [Column(TypeName = "VARCHAR(100)")]
     public string? RefreshToken { get; set; }
 
-    [Column("refresh_token_expiration_time")]
     public DateTimeOffset? RefreshTokenExpirationTime { get; set; }
+
+    public virtual ICollection<SubRedditModerator> SubRedditModerators { get; set; } = new List<SubRedditModerator>();
 }

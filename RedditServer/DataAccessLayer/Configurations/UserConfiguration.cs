@@ -1,4 +1,5 @@
-﻿using Common.Enums;
+﻿using Common.Constants;
+using Common.Enums;
 using Entities.DataModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -15,6 +16,9 @@ public class UserConfiguration
 
         builder.Property(user => user.Status)
             .HasDefaultValue(UserStatusType.Active);
+
+        builder.Property(user => user.Avatar)
+            .HasDefaultValue(SystemConstants.DefaultUserAvatar);
 
         builder.HasIndex(user => user.Username)
             .IsUnique();

@@ -18,9 +18,14 @@ internal class SubRedditModeratorConfiguration
             model.UserId
         }).IsUnique();
 
-        builder.HasOne(model => model.Moderator)
-            .WithMany()
+        //Many to many relationship with SubRedditModerator for SubReddit
+        builder.HasOne(model => model.User)
+            .WithMany(user => user.SubRedditModerators)
             .HasForeignKey(model => model.UserId)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(model => model.SubReddit)
+            .WithMany(subreddit => subreddit.Moderators)
+            .HasForeignKey(model => model.SubRedditId);
     }
 }

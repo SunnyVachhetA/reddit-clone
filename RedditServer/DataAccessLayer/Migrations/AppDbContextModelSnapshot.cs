@@ -22,66 +22,75 @@ namespace DataAccessLayer.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Entities.DataModels.RedditTopic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(255)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tbRedditTopic");
+                });
+
             modelBuilder.Entity("Entities.DataModels.SubReddit", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("Banner")
                         .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnName("banner");
+                        .HasDefaultValue("https://firebasestorage.googleapis.com/v0/b/reddit-clone-6a660.appspot.com/o/files%2Fbakcground.jpg?alt=media");
 
                     b.Property<Guid>("CreatedById")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("created_by");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("CreatedOn")
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("created_on");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(MAX)")
-                        .HasColumnName("description");
+                        .HasColumnType("VARCHAR(MAX)");
 
                     b.Property<string>("Icon")
                         .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnName("icon");
+                        .HasDefaultValue("https://firebasestorage.googleapis.com/v0/b/reddit-clone-6a660.appspot.com/o/files%2Fsubreddit.png?alt=media");
 
                     b.Property<long>("MemberCount")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(255)")
-                        .HasColumnName("slug");
+                        .HasColumnType("VARCHAR(255)");
 
                     b.Property<byte>("Status")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("tinyint")
-                        .HasDefaultValue((byte)1)
-                        .HasColumnName("status");
+                        .HasDefaultValue((byte)1);
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(255)")
-                        .HasColumnName("title");
+                        .HasColumnType("VARCHAR(255)");
 
                     b.Property<byte>("Type")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("tinyint")
-                        .HasDefaultValue((byte)1)
-                        .HasColumnName("type");
+                        .HasDefaultValue((byte)1);
 
                     b.Property<DateTimeOffset>("UpdatedOn")
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("updated_on");
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
@@ -90,39 +99,33 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("Slug")
                         .IsUnique();
 
-                    b.ToTable("sub_reddit");
+                    b.ToTable("tbSubReddit");
                 });
 
             modelBuilder.Entity("Entities.DataModels.SubRedditModerator", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("id");
+                        .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedOn")
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("created_on");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("Status")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(1)
-                        .HasColumnName("status");
+                        .HasDefaultValue(1);
 
-                    b.Property<long>("SubRedditId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("subreddit_id");
+                    b.Property<Guid>("SubRedditId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("UpdatedOn")
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("updated_on");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("user_id");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -131,31 +134,42 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("SubRedditId", "UserId")
                         .IsUnique();
 
-                    b.ToTable("subreddit_moderator");
+                    b.ToTable("tbSubRedditModerator");
                 });
 
             modelBuilder.Entity("Entities.DataModels.SubRedditTopic", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<long?>("SubRedditId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR(255)")
-                        .HasColumnName("title");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<byte>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint")
+                        .HasDefaultValue((byte)1);
+
+                    b.Property<Guid>("SubRedditId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("TopicId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset>("UpdatedOn")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SubRedditId");
 
-                    b.ToTable("subreddit_topic");
+                    b.HasIndex("TopicId", "SubRedditId")
+                        .IsUnique();
+
+                    b.ToTable("tbSubRedditTopic");
                 });
 
             modelBuilder.Entity("Entities.DataModels.User", b =>
@@ -163,45 +177,42 @@ namespace DataAccessLayer.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("id")
                         .HasDefaultValueSql("NEWID()");
 
+                    b.Property<string>("Avatar")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("https://firebasestorage.googleapis.com/v0/b/reddit-clone-6a660.appspot.com/o/files%2Fprofile-icon.png?alt=media");
+
                     b.Property<DateTimeOffset>("CreatedOn")
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("created_on");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(255)")
-                        .HasColumnName("email");
+                        .HasColumnType("VARCHAR(255)");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(100)")
-                        .HasColumnName("password");
+                        .HasColumnType("VARCHAR(100)");
 
                     b.Property<string>("RefreshToken")
-                        .HasColumnType("VARCHAR(100)")
-                        .HasColumnName("refresh_token");
+                        .HasColumnType("VARCHAR(100)");
 
                     b.Property<DateTimeOffset?>("RefreshTokenExpirationTime")
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("refresh_token_expiration_time");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<byte>("Status")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("tinyint")
-                        .HasDefaultValue((byte)1)
-                        .HasColumnName("status");
+                        .HasDefaultValue((byte)1);
 
                     b.Property<DateTimeOffset>("UpdatedOn")
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("updated_on");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(20)")
-                        .HasColumnName("username");
+                        .HasColumnType("VARCHAR(20)");
 
                     b.HasKey("Id");
 
@@ -211,7 +222,7 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("user");
+                    b.ToTable("tbUser");
                 });
 
             modelBuilder.Entity("Entities.DataModels.SubReddit", b =>
@@ -233,22 +244,39 @@ namespace DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entities.DataModels.User", "Moderator")
-                        .WithMany()
+                    b.HasOne("Entities.DataModels.User", "User")
+                        .WithMany("SubRedditModerators")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Moderator");
-
                     b.Navigation("SubReddit");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Entities.DataModels.SubRedditTopic", b =>
                 {
-                    b.HasOne("Entities.DataModels.SubReddit", null)
+                    b.HasOne("Entities.DataModels.SubReddit", "SubReddit")
                         .WithMany("Topics")
-                        .HasForeignKey("SubRedditId");
+                        .HasForeignKey("SubRedditId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.DataModels.RedditTopic", "Topic")
+                        .WithMany("SubReddits")
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SubReddit");
+
+                    b.Navigation("Topic");
+                });
+
+            modelBuilder.Entity("Entities.DataModels.RedditTopic", b =>
+                {
+                    b.Navigation("SubReddits");
                 });
 
             modelBuilder.Entity("Entities.DataModels.SubReddit", b =>
@@ -256,6 +284,11 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Moderators");
 
                     b.Navigation("Topics");
+                });
+
+            modelBuilder.Entity("Entities.DataModels.User", b =>
+                {
+                    b.Navigation("SubRedditModerators");
                 });
 #pragma warning restore 612, 618
         }

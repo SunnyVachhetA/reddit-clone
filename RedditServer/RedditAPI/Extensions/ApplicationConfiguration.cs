@@ -1,4 +1,5 @@
 ﻿using BusinessAccessLayer.Abstraction;
+using BusinessAccessLayer.AppUser;
 using BusinessAccessLayer.Implementation;
 using BusinessAccessLayer.Settings;
 using BusinessAccessLayer.Validators;
@@ -7,9 +8,12 @@ using DataAccessLayer.Abstraction;
 using DataAccessLayer.Data;
 using DataAccessLayer.Implementation;
 using FluentValidation;
+using Google.Cloud.Firestore;
+using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 using WebAPI.Filters;
 
@@ -32,6 +36,9 @@ public static class ApplicationConfiguration
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ISubRedditRepository, SubRedditRepository>();
+        services.AddScoped<IRedditTopicRepository, RedditTopicRepository>();
+        services.AddScoped<ISubRedditTopicRepository, SubRedditTopicRepository>();
+        services.AddScoped<ISubRedditModeratorRepository, SubRedditModeratorRepository>();
     }
 
     public static void RegisterServices(this IServiceCollection services)
@@ -39,6 +46,9 @@ public static class ApplicationConfiguration
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<ISubRedditService, SubRedditService>();
+        services.AddScoped<IRedditTopicService, RedditTopicService>();
+        services.AddScoped<ISubRedditTopicService, SubRedditTopicService>();
+        services.AddScoped<ISubRedditModeratorService, SubRedditModeratorService>();
     }
 
     public static void ConfigureCors(this IServiceCollection services)
@@ -74,8 +84,6 @@ public static class ApplicationConfiguration
         JwtSetting jwtSetting = config.GetSection("JwtSetting").Get<JwtSetting>();
         services.AddSingleton(jwtSetting);
 
-        Console.WriteLine(jwtSetting);
-
         services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -96,6 +104,58 @@ public static class ApplicationConfiguration
                 ValidAudience = jwtSetting.Audiences,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSetting.Key))
             };
+        });
+
+        services.AddHttpContextAccessor();
+        services.AddSingleton<IApplicationUser, ApplicationUser>();
+    }
+
+    public static void ConfigureFirebase(this IServiceCollection services,
+        IConfiguration config)
+    {
+        FirebaseSetting firebaseSetting = config.GetSection("FirebaseSetting").Get<FirebaseSetting>();
+        services.AddSingleton(firebaseSetting);
+
+        services.AddSingleton<IFireStoreService>(options =>
+        {
+            return new FireStoreService(FirestoreDb.Create(firebaseSetting.ProjectName));
+        });
+
+        services.AddSingleton<IFirebaseStorageService>(options =>
+        {
+            return new FirebaseStorageService(StorageClient.Create(), firebaseSetting);
+        });
+    }
+
+    public static void ConfigureSwagger(this IServiceCollection services)
+    {
+        services.AddSwaggerGen(opt =>
+        {
+            opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Reddit Server", Version = "v1" });
+            opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Please enter JWT token",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = "bearer"
+            });
+
+            opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new List<string>()
+                }
+            });
         });
     }
 }

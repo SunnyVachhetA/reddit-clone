@@ -25,7 +25,7 @@ public class AppDbContext : DbContext
 
     public virtual DbSet<SubRedditModerator> SubRedditModerators { get; set; }
 
-    public virtual DbSet<SubRedditTopic> SubRedditTopics { get; set; }
+    public virtual DbSet<RedditTopic> SubRedditTopics { get; set; }
 
     #endregion Properties
 

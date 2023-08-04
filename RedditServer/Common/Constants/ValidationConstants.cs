@@ -13,6 +13,12 @@ public class ValidationConstants
 
     public static readonly string EmailRegEx = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$";
 
+    #region SubReddit Patterns
+
+    public static readonly string SubRedditSlugRegEx = "[a-z-]";
+
+    #endregion
+
     #endregion Patterns
 
     #region Constants
@@ -28,6 +34,21 @@ public class ValidationConstants
     public static readonly int MinPasswordLength = 5;
 
     public static readonly int MaxPasswordLength = 20;
+
+    #region SubReddit
+
+    public static readonly int MinSubRedditTitleLength = 3;
+
+    public static readonly int MaxSubRedditTitleLength = 50; //TODO : Change
+
+    public static readonly int MinSubRedditSlugLength = 3;
+
+    public static readonly int MaxSubRedditSlugLength = 25;
+
+    public static readonly int MinSubRedditDescriptionLength = 3;
+
+    public static readonly int MaxSubRedditDescriptionLength = 400; //TODO: Change
+    #endregion SubReddit
 
     #endregion Constants
 }

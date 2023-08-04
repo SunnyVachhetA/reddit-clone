@@ -92,8 +92,8 @@ public class AccountService : IAccountService
     private static IEnumerable<Claim> GenerateUserClaims(User model)
         => new List<Claim>()
         {
-            new(JwtRegisteredClaimNames.Sub, model.Username),
-            new(JwtRegisteredClaimNames.NameId, model.Id.ToString()),
+            new(ClaimTypes.Name, model.Username),
+            new(ClaimTypes.NameIdentifier, model.Id.ToString()),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 

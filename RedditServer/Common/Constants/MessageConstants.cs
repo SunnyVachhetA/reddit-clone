@@ -17,6 +17,8 @@ public class MessageConstants
 
     public static readonly string AccessTokenRefreshSuccess = "Access token refreshed successfully.";
 
+    public static readonly string SubRedditCreated = "Subreddit created successfully.";
+
     #endregion Success Message
 
     #region Exception Messages
@@ -26,6 +28,8 @@ public class MessageConstants
     public static readonly string VALIDATION_ERROR = "One or more validation failures have occured.";
 
     public const string RESOURCE_NOT_FOUND = "Resource not found.";
+
+    public const string SUBREDDIT_NOT_FOUND = "SubReddit '#' not found.";
 
     #endregion Exception Messages
 
@@ -45,6 +49,26 @@ public class MessageConstants
     public static readonly string UsernameAlreadyExists = "Username is not available.";
 
     public static readonly string InvalidRefreshToken = "Refresh token is either expired or not passed.";
+
+    #region SubReddit Validation Message
+
+    public static readonly string InvalidIconImageFile = "For Icon, only jpeg, png and jpg images are allowed.";
+
+    public static readonly string InvalidBannerImageFile = "For Banner, only jpeg, png and jpg images are allowed.";
+
+    public static readonly string InvalidSubRedditSlug = "Slug should be made of a-z and -.";
+
+    public static readonly string InvalidSubRedditType = "Subreddit can be private/public only.";
+
+    public static readonly string InvalidRedditTopicId = "Reddit topic is either deleted or not active.";
+
+    public static readonly string MaxSubRedditIconSizeLength
+        = $"Subreddit icon size should be less than or equal to {SystemConstants.MaxIconSizeInMB}";
+
+    public static readonly string MaxSubRedditBannerSizeLength
+    = $"Subreddit banner size should be less than or equal to {SystemConstants.MaxBannerSizeInMB}";
+
+    #endregion SubReddit Validation Message
 
     #endregion Validation Messages
 }

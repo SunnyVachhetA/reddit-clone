@@ -1,15 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Common.Enums;
+using Entities.Abstract;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities.DataModels;
 
-[Table("subreddit_topic")]
-public class SubRedditTopic
+[Table("tbSubRedditTopic")]
+public class SubRedditTopic : AuditableEntity<long>
 {
-    [Key]
-    [Column("id")]
-    public int Id { get; set; }
+    public Guid SubRedditId { get; set; }
 
-    [Column("title", TypeName = "VARCHAR(255)")]
-    public string Title { get; set; } = null!;
+    [ForeignKey(nameof(SubRedditId))]
+    public virtual SubReddit SubReddit { get; set; } = null!;
+
+    public int TopicId { get; set; }
+
+    [ForeignKey(nameof(TopicId))]
+    public virtual RedditTopic Topic { get; set; } = null!;
+
+    public SubRedditTopicStatus Status { get; set; }
 }
